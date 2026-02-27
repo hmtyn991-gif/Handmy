@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
+<!-- موبایل مثل دسکتاپ رفتار کنه -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
 <title>Interactive Space Sphere</title>
+
 <style>
   body {
     margin: 0;
@@ -19,15 +24,21 @@
 
 const scene = new THREE.Scene();
 
+// زاویه دید بازتر
 const camera = new THREE.PerspectiveCamera(
-  75,
+  100,
   window.innerWidth / window.innerHeight,
   0.1,
   1000
 );
-camera.position.z = 4;
+
+// فاصله مناسب‌تر برای موبایل
+camera.position.z = 5;
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
+
+// کیفیت بهتر روی موبایل
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
@@ -149,7 +160,6 @@ scene.add(ringPoints);
 // ================= کنترل =================
 let morph = 0;
 let targetMorph = 0;
-
 let explosion = 0;
 let explosionTrigger = false;
 
@@ -168,10 +178,7 @@ window.addEventListener("mousemove", (event) => {
   targetRotationX = mouseY * 1.2;
 });
 
-window.addEventListener("mousedown", () => {
-  targetMorph = 1;
-});
-
+window.addEventListener("mousedown", () => targetMorph = 1);
 window.addEventListener("mouseup", () => {
   targetMorph = 0;
   explosion = 1;
@@ -190,10 +197,7 @@ window.addEventListener("touchmove", (event) => {
   targetRotationX = mouseY * 1.2;
 });
 
-window.addEventListener("touchstart", () => {
-  targetMorph = 1;
-});
-
+window.addEventListener("touchstart", () => targetMorph = 1);
 window.addEventListener("touchend", () => {
   targetMorph = 0;
   explosion = 1;
