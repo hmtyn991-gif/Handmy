@@ -24,7 +24,7 @@ const scene = new THREE.Scene();
 let isMobile = window.innerWidth < 768;
 
 // FOV هوشمند
-let fov = isMobile ? 110 : 90;
+let fov = isMobile ? 200 : 180;
 
 const camera = new THREE.PerspectiveCamera(
   fov,
@@ -282,6 +282,7 @@ window.addEventListener("resize", () => {
 </script>
 </body>
 </html>
+
 
 
 
