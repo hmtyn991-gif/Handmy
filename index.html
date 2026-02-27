@@ -34,7 +34,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 
 // فاصله هوشمند
-camera.position.z = isMobile ? 8 : 6.5;
+camera.position.z = isMobile ? 3 : 1;
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -282,5 +282,6 @@ window.addEventListener("resize", () => {
 </script>
 </body>
 </html>
+
 
 
