@@ -2,10 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-
-<!-- موبایل مثل دسکتاپ رفتار کنه -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-
 <title>Interactive Space Sphere</title>
 
 <style>
@@ -24,20 +21,22 @@
 
 const scene = new THREE.Scene();
 
-// زاویه دید بازتر
+let isMobile = window.innerWidth < 768;
+
+// FOV هوشمند
+let fov = isMobile ? 110 : 95;
+
 const camera = new THREE.PerspectiveCamera(
-  100,
+  fov,
   window.innerWidth / window.innerHeight,
   0.1,
   1000
 );
 
-// فاصله مناسب‌تر برای موبایل
-camera.position.z = 5;
+// فاصله هوشمند
+camera.position.z = isMobile ? 6.5 : 5;
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-
-// کیفیت بهتر روی موبایل
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -66,7 +65,7 @@ const starsMaterial = new THREE.PointsMaterial({
   color: 0xffffff,
   size: 1.2,
   transparent: true,
-  opacity: 1.0,
+  opacity: 1,
   blending: THREE.AdditiveBlending
 });
 
@@ -168,14 +167,17 @@ let mouseY = 0;
 let targetRotationX = 0;
 let targetRotationY = 0;
 
-
-// دسکتاپ
-window.addEventListener("mousemove", (event) => {
-  mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-  mouseY = (event.clientY / window.innerHeight) * 2 - 1;
-
+function handleMove(x, y) {
+  mouseX = (x / window.innerWidth) * 2 - 1;
+  mouseY = (y / window.innerHeight) * 2 - 1;
   targetRotationY = mouseX * 1.2;
   targetRotationX = mouseY * 1.2;
+}
+
+window.addEventListener("mousemove", e => handleMove(e.clientX, e.clientY));
+window.addEventListener("touchmove", e => {
+  const t = e.touches[0];
+  handleMove(t.clientX, t.clientY);
 });
 
 window.addEventListener("mousedown", () => targetMorph = 1);
@@ -183,18 +185,6 @@ window.addEventListener("mouseup", () => {
   targetMorph = 0;
   explosion = 1;
   explosionTrigger = true;
-});
-
-
-// موبایل
-window.addEventListener("touchmove", (event) => {
-  const touch = event.touches[0];
-
-  mouseX = (touch.clientX / window.innerWidth) * 2 - 1;
-  mouseY = (touch.clientY / window.innerHeight) * 2 - 1;
-
-  targetRotationY = mouseX * 1.2;
-  targetRotationX = mouseY * 1.2;
 });
 
 window.addEventListener("touchstart", () => targetMorph = 1);
@@ -273,9 +263,19 @@ function animate() {
 
 animate();
 
+
+
+// ================= ریسپانسیو هوشمند =================
 window.addEventListener("resize", () => {
+
+  isMobile = window.innerWidth < 768;
+
+  camera.fov = isMobile ? 110 : 95;
+  camera.position.z = isMobile ? 6.5 : 5;
+
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
+
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
